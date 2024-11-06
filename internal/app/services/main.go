@@ -19,6 +19,15 @@ func ListImages(ctx context.Context, cli *client.Client) ([]imagetypes.Summary, 
 	return images, nil
 }
 
+func GetImageById(ctx context.Context, cli *client.Client, imageId string) (types.ImageInspect, error) {
+	image, _, err := cli.ImageInspectWithRaw(ctx, imageId)
+	if err != nil {
+		return types.ImageInspect{}, err
+	}
+
+	return image, nil
+}
+
 func ListContainers(ctx context.Context, cli *client.Client) ([]types.Container, error) {
 	containers, err := cli.ContainerList(ctx, containertypes.ListOptions{})
 	if err != nil {
@@ -26,4 +35,13 @@ func ListContainers(ctx context.Context, cli *client.Client) ([]types.Container,
 	}
 
 	return containers, nil
+}
+
+func GetContainerById(ctx context.Context, cli *client.Client, containerId string) (types.ContainerJSON, error) {
+	container, err := cli.ContainerInspect(ctx, containerId)
+	if err != nil {
+		return types.ContainerJSON{}, err
+	}
+
+	return container, nil
 }
