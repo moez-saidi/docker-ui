@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/docker/docker/api/types"
-	containertypes "github.com/docker/docker/api/types/container"
 
 	imagetypes "github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/client"
@@ -26,22 +25,4 @@ func GetImageById(ctx context.Context, cli *client.Client, imageId string) (type
 	}
 
 	return image, nil
-}
-
-func ListContainers(ctx context.Context, cli *client.Client) ([]types.Container, error) {
-	containers, err := cli.ContainerList(ctx, containertypes.ListOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	return containers, nil
-}
-
-func GetContainerById(ctx context.Context, cli *client.Client, containerId string) (types.ContainerJSON, error) {
-	container, err := cli.ContainerInspect(ctx, containerId)
-	if err != nil {
-		return types.ContainerJSON{}, err
-	}
-
-	return container, nil
 }
