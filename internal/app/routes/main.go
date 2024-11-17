@@ -7,6 +7,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/gin-gonic/gin"
 
+	"docker-ui/internal/app/models"
 	svc "docker-ui/internal/app/services"
 )
 
@@ -62,5 +63,20 @@ func RegisterRoutes(router *gin.Engine) {
 		}
 
 		c.JSON(http.StatusOK, image)
+	})
+
+	api.POST("/pull-image", func(c *gin.Context) {
+		var imageInfo models.ImageInfo
+		if err := c.ShouldBindJSON(&imageInfo); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input", "details": err.Error()})
+			return
+		}
+
+		if err := svc.PullImage(ctx, cli, imageInfo); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Image pulled successfully"})
 	})
 }
