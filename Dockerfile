@@ -12,7 +12,7 @@ COPY . .
 RUN go build -o /code/app cmd/server/main.go
 
 # Main image with reduced size
-FROM alpine:latest as app
+FROM alpine:latest AS app
 
 WORKDIR /app
 COPY --from=build /code/app .
