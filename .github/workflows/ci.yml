@@ -1,0 +1,46 @@
+name: Go CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Test, Lint, and Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.2'
+
+      - name: Run app using docker compose
+        run: docker-compose -p test -f docker-compose.test.yml up -d --build
+
+      - name: Run tests
+        run: docker-compose -p test exec app go test ./... -v -cover
+
+      - name: Tear down services
+        run: docker-compose down --volumes --remove-orphans
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: >
+            --timeout 5m
+            ./...
+
+      - name: Check for unused dependencies
+        run: go mod tidy -v && git diff --exit-code
+      
+
+
