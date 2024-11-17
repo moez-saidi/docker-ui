@@ -6,7 +6,20 @@ services:
       target: app
     image: docker-ui
     restart: always
+    env_file:
+      - .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "10000:10000"
+
+  db:
+    image: postgres:17.1
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_volume:

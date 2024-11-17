@@ -1,0 +1,38 @@
+# Ignore Go-specific files
+*.exe
+*.test
+*.out
+*.log
+
+# Binaries
+bin/
+*.o
+
+# Dependency directories (when not using vendoring)
+vendor/
+
+# IDE and editor-specific files
+.vscode/
+.idea/
+*.swp
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Configuration and secrets
+.env
+
+# Git-related files
+.git/
+.gitignore
+
+
+
+# Docker-specific files
+Dockerfile
+docker-compose.yml
