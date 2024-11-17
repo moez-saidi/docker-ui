@@ -26,7 +26,7 @@ jobs:
         run: docker compose -p test -f docker-compose.test.yml up -d --build
 
       - name: Run tests
-        run: docker compose -p test exec app go test ./... -v -cover
+        run: docker exec test_app_1 go test ./... -v -cover
 
       - name: Tear down services
         run: docker compose down --volumes --remove-orphans
