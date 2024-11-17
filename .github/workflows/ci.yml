@@ -22,14 +22,11 @@ jobs:
         with:
           go-version: '1.23.2'
 
-      - name: Run app using docker compose
-        run: docker compose -p test -f docker-compose.test.yml up -d --build
+      - name: Build image
+        run: docker build -t test:latest --tagert build .
 
       - name: Run tests
-        run: docker exec test-app-1 go test ./... -v -cover
-
-      - name: Tear down services
-        run: docker compose -p test down --volumes --remove-orphans
+        run: docker run --rm --entrypoint "go test ./... -v -cover" test:latest
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
